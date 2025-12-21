@@ -1,0 +1,174 @@
+[
+  {
+    "id": 1,
+    "productCode": "LL075",
+    "distributorCode": "DQ-25A25",
+    "imagePath": "/cards/LL075.webp",
+    "videoUrl": "https://www.youtube.com/embed/0Uc9zx-bwCI?si=vBWYsWCjx0uIOeEA",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.800" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.700" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.650" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.600" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.500" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.450" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.900 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.900" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.800" },
+        { "min_quantity": "trên 500", "unit_price": "2.700" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Hồng"],
+      "thiet_ke_ruot": ["Cắt bế"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Hoa", "Ảnh minh họa", "Hiện đại"]
+    }
+  },
+  {
+    "id": 2,
+    "productCode": "LL077",
+    "distributorCode": "DQ-25A27",
+    "imagePath": "/cards/LL077.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.800" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.700" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.650" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.600" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.500" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.450" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.900 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.900" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.800" },
+        { "min_quantity": "trên 500", "unit_price": "2.700" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Xanh lá"],
+      "thiet_ke_ruot": ["Cắt bế"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Hoa", "Hiện đại"]
+    }
+  },
+  {
+    "id": 3,
+    "productCode": "LL014",
+    "distributorCode": "DQ-25A14",
+    "imagePath": "/cards/LL014.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.500" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.400" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.350" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.300" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.200" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.150" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.600 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.600" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.500" },
+        { "min_quantity": "trên 500", "unit_price": "2.400" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Giấy ford"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Đỏ", "Trắng"],
+      "thiet_ke_ruot": ["Cắt bế"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Hoa", "Hiện đại"]
+    }
+  },
+  {
+    "id": 4,
+    "productCode": "LL036",
+    "distributorCode": "TLP-1221",
+    "imagePath": "/cards/LL036.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": 0, "unit_price": "1.700" },
+        { "min_quantity": "500", "unit_price": "1.600" },
+        { "min_quantity": "1000", "unit_price": "1.550" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.800 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.800" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.700" },
+        { "min_quantity": "trên 500", "unit_price": "2.600" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ép kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Xanh"],
+      "thiet_ke_ruot": ["Bo góc"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Chibi", "Miền Tây", "Hiện đại"]
+    }
+  },
+  {
+    "id": 5,
+    "productCode": "LL022",
+    "distributorCode": "TLP-1447",
+    "imagePath": "/cards/LL022.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": 0, "unit_price": "1.800" },
+        { "min_quantity": "500", "unit_price": "1.700" },
+        { "min_quantity": "1000", "unit_price": "1.650" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.900 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.900" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.800" },
+        { "min_quantity": "trên 500", "unit_price": "2.700" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ép kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Hồng"],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Ảnh minh họa", "Nơ", "Hoa", "Hiện đại"]
+    }
+  },
+  {
+    "id": 6,
+    "productCode": "LL025",
+    "distributorCode": "TLP-1204",
+    "imagePath": "/cards/LL025.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": 0, "unit_price": "1.700" },
+        { "min_quantity": "500", "unit_price": "1.600" },
+        { "min_quantity": "1000", "unit_price": "1.550" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.800 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.800" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.700" },
+        { "min_quantity": "trên 500", "unit_price": "2.600" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Draft", "Ép kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Vàng kem"],
+      "thiet_ke_ruot": ["Bo góc"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Hoa", "Hiện đại"]
+    }
+  }
+]
