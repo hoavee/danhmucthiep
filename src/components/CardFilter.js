@@ -59,7 +59,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
             key={index}
             className="flex justify-between text-sm border-b border-gray-50 pb-1 last:border-0"
           >
-            <span className="text-gray-500">Số lượng {tier.min_quantity}:</span>
+            <span className="text-gray-500">sl {tier.min_quantity}:</span>
             <span className="font-bold text-gray-900">{tier.unit_price}đ</span>
           </div>
         ))}
@@ -97,6 +97,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center text-[10px] font-bold uppercase text-gray-600">
                 Phóng to
               </div>
+              <p className="mt-1 text-gray-400">Nhấp vào ảnh để phóng to</p>
             </div>
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">
               {card.productCode}
