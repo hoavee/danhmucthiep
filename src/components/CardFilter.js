@@ -44,6 +44,27 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
     mui_huong: "Mùi hương",
   };
 
+  // Logic tự động nhận diện TikTok hoặc YouTube Shorts
+  const getEmbedUrl = (url) => {
+    if (!url) return "";
+
+    // Xử lý YouTube Shorts
+    if (url.includes("youtube.com/shorts/")) {
+      const videoId = url.split("/shorts/")[1]?.split("?")[0];
+      return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    }
+
+    // Xử lý TikTok
+    if (url.includes("tiktok.com")) {
+      const videoIdMatch = url.match(/\/video\/(\d+)/);
+      if (videoIdMatch && videoIdMatch[1]) {
+        return `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}?autoplay=1`;
+      }
+    }
+
+    return url;
+  };
+
   const renderTiers = (tiers, type) => (
     <div className="flex-1 p-4 rounded-xl border border-gray-200 bg-white shadow-sm">
       <h4
@@ -97,12 +118,10 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center text-[10px] font-bold uppercase text-gray-600">
                 Phóng to
               </div>
-              <p className="mt-1 text-gray-400">Nhấp vào ảnh để phóng to</p>
             </div>
             <h2 className="text-2xl font-black text-gray-900 tracking-tight">
               {card.productCode}
             </h2>
-
             {isAdmin && (
               <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1 mb-4">
                 Mã NPP: {card.distributorCode}
@@ -114,7 +133,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                 onClick={() => setShowVideo(true)}
                 className="inline-flex px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors items-center justify-center gap-2 shadow-md mb-6"
               >
-                <span className="text-xs">▶</span> Video
+                <span className="text-xs">▶</span> Xem Video
               </button>
             )}
 
@@ -129,11 +148,6 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0068ff] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
                 >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg"
-                    className="w-4 h-4"
-                    alt="Zalo"
-                  />
                   Zalo
                 </a>
                 <a
@@ -142,11 +156,6 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                   rel="noopener noreferrer"
                   className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0084FF] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
                 >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg"
-                    className="w-4 h-4"
-                    alt="Messenger"
-                  />
                   Messenger
                 </a>
               </div>
@@ -173,21 +182,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                     )
                 )}
               </div>
-
-              {card.categories.mo_ta && card.categories.mo_ta.length > 0 && (
-                <div className="pt-4 border-t border-gray-200 mt-2">
-                  <div className="flex gap-2">
-                    <span className="text-[10px] font-bold text-blue-600 uppercase w-20 shrink-0">
-                      Mô tả:
-                    </span>
-                    <span className="text-sm font-medium text-gray-600 italic leading-relaxed">
-                      {card.categories.mo_ta.join(", ")}
-                    </span>
-                  </div>
-                </div>
-              )}
             </div>
-
             <div className="flex flex-col sm:flex-row gap-4">
               {isAdmin && renderTiers(card.pricing.purchase, "purchase")}
               {renderTiers(card.pricing.sale, "sale")}
@@ -195,28 +190,32 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
           </div>
         </div>
 
+        {/* --- MODAL VIDEO - NÚT CLOSE Ở GÓC TRÁI --- */}
         {showVideo && (
           <div
-            className="fixed inset-0 z-[120] bg-black/90 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-4"
             onClick={() => setShowVideo(false)}
           >
-            <div className="relative w-full max-w-3xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
+            <div
+              className="relative w-full max-w-[360px] aspect-[9/16] bg-black rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={() => setShowVideo(false)}
-                className="absolute top-2 right-2 w-8 h-8 bg-white/20 hover:bg-white/40 text-white rounded-full z-[130] flex items-center justify-center"
+                className="absolute top-4 left-4 w-9 h-9 bg-black/50 hover:bg-red-500 text-white rounded-full z-[140] flex items-center justify-center transition-colors shadow-lg"
               >
                 ✕
               </button>
-              <iframe
-                className="w-full h-full"
-                src={`${card.videoUrl?.replace(
-                  "watch?v=",
-                  "embed/"
-                )}?autoplay=1`}
-                title="Product Video"
-                frameBorder="0"
-                allowFullScreen
-              ></iframe>
+              <div className="w-full h-full">
+                <iframe
+                  className="w-full h-full"
+                  src={getEmbedUrl(card.videoUrl)}
+                  title="Video Player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
           </div>
         )}
@@ -238,10 +237,7 @@ const CardFilter = () => {
   useEffect(() => {
     setMounted(true);
     const params = new URLSearchParams(window.location.search);
-    if (params.get("view") === "Hoangviet@70") {
-      setIsAdmin(true);
-    }
-
+    if (params.get("view") === "Hoangviet@70") setIsAdmin(true);
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
@@ -276,15 +272,13 @@ const CardFilter = () => {
 
   const handleTagClick = (groupKey, tag) => {
     setSelectedTags((prev) => {
-      if (groupKey === "mo_ta") {
+      if (groupKey === "mo_ta")
         return prev.includes(tag)
           ? prev.filter((t) => t !== tag)
           : [...prev, tag];
-      } else {
-        const tagsInGroup = groupedAttributes[groupKey];
-        const otherGroupsTags = prev.filter((t) => !tagsInGroup.includes(t));
-        return prev.includes(tag) ? otherGroupsTags : [...otherGroupsTags, tag];
-      }
+      const tagsInGroup = groupedAttributes[groupKey];
+      const otherGroupsTags = prev.filter((t) => !tagsInGroup.includes(t));
+      return prev.includes(tag) ? otherGroupsTags : [...otherGroupsTags, tag];
     });
     setSelectedCard(null);
   };
@@ -310,13 +304,11 @@ const CardFilter = () => {
     });
   }, [searchTerm, selectedTags]);
 
-  // HÀM LẤY GIÁ BÁN THẤP NHẤT (Thường là mốc cuối cùng trong mảng sale)
   const getCheapestPrice = (card) => {
     const saleTiers = card.pricing.sale;
-    if (saleTiers && saleTiers.length > 0) {
-      return saleTiers[saleTiers.length - 1].unit_price;
-    }
-    return null;
+    return saleTiers && saleTiers.length > 0
+      ? saleTiers[saleTiers.length - 1].unit_price
+      : null;
   };
 
   if (!mounted) return <div className="min-h-screen bg-[#f8f9fa]" />;
@@ -350,20 +342,13 @@ const CardFilter = () => {
               </button>
             )}
           </div>
-
-          <div className="space-y-2">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-              Tìm kiếm mã / đặc điểm
-            </p>
-            <input
-              type="text"
-              placeholder="Nhập mã thiệp..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white shadow-inner"
-            />
-          </div>
-
+          <input
+            type="text"
+            placeholder="Nhập mã thiệp..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
+          />
           <div className="space-y-5 max-h-[50vh] lg:max-h-none overflow-y-auto pr-2 custom-scrollbar">
             {Object.entries(groupedAttributes).map(
               ([key, tags]) =>
@@ -380,8 +365,8 @@ const CardFilter = () => {
                           onClick={() => handleTagClick(key, tag)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                             selectedTags.includes(tag)
-                              ? "bg-blue-600 text-white border-blue-600 shadow-lg scale-95"
-                              : "bg-white text-gray-600 border-gray-100 hover:border-blue-400 hover:text-blue-600"
+                              ? "bg-blue-600 text-white border-blue-600 shadow-lg"
+                              : "bg-white text-gray-600 border-gray-100 hover:border-blue-400"
                           }`}
                         >
                           {tag}
@@ -404,11 +389,7 @@ const CardFilter = () => {
               filteredCards.map((card) => (
                 <div
                   key={card.id}
-                  className={`group bg-white rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 active:scale-95 cursor-pointer ${
-                    selectedCard?.id === card.id
-                      ? "ring-2 ring-blue-600 border-transparent shadow-lg"
-                      : "border-gray-100 shadow-sm"
-                  }`}
+                  className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
                   onClick={() => setSelectedCard(card)}
                 >
                   <div className="aspect-square p-4 flex items-center justify-center overflow-hidden">
@@ -419,22 +400,18 @@ const CardFilter = () => {
                     />
                   </div>
                   <div className="p-3 border-t border-gray-50 text-center bg-gray-50/30">
-                    <p className="text-sm font-black text-gray-900 group-hover:text-blue-600 transition-colors">
+                    <p className="text-sm font-black text-gray-900 group-hover:text-blue-600">
                       {card.productCode}
                     </p>
-
-                    {/* HIỂN THỊ GIÁ RẺ NHẤT TẠI LIST */}
-                    <p className="text-[11px] font-bold text-emerald-600 mt-0.5">
+                    <p className="text-[11px] font-bold text-emerald-600">
                       Giá từ: {getCheapestPrice(card)}đ
                     </p>
                   </div>
                 </div>
               ))
             ) : (
-              <div className="col-span-full py-20 text-center">
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">
-                  Không tìm thấy sản phẩm nào phù hợp
-                </p>
+              <div className="col-span-full py-20 text-center text-gray-400 font-bold uppercase text-xs">
+                Không tìm thấy sản phẩm
               </div>
             )}
           </div>
@@ -449,7 +426,6 @@ const CardFilter = () => {
           isAdmin={isAdmin}
         />
       )}
-
       {selectedCard && isModalOpen && (
         <ImageModal
           imageUrl={selectedCard.imagePath}
@@ -464,7 +440,6 @@ const CardFilter = () => {
         @keyframes progress-loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
       `,
         }}
