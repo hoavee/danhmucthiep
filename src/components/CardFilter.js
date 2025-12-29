@@ -2,6 +2,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 // Giả định file cardData.json nằm cùng thư mục hoặc theo cấu trúc của bạn
 import MOCK_CARDS from "../data/cardData.json";
+// IMPORT FILE CÂU HỎI MỚI TẠI ĐÂY
+import QUESTIONS from "../data/questions.json";
 
 // --- COMPONENT MODAL XEM ẢNH FULL ---
 const ImageModal = ({ imageUrl, altText, onClose }) => {
@@ -42,6 +44,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
     tong_mau: "Tông màu",
     thiet_ke_ruot: "Thiết kế ruột",
     mui_huong: "Mùi hương",
+    mo_ta: "Mô tả",
   };
 
   // Logic tự động nhận diện TikTok hoặc YouTube Shorts
@@ -234,18 +237,30 @@ const CardFilter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
+  // STATE PHÂN TRANG
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 2;
+
+  // STATE FAQ POPUP
+  const [selectedFaq, setSelectedFaq] = useState(null);
+
   useEffect(() => {
     setMounted(true);
     const params = new URLSearchParams(window.location.search);
     if (params.get("view") === "Hoangviet@70") setIsAdmin(true);
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, [searchTerm, selectedTags]);
 
   useEffect(() => {
-    document.body.style.overflow = selectedCard ? "hidden" : "unset";
-  }, [selectedCard]);
+    document.body.style.overflow =
+      selectedCard || selectedFaq ? "hidden" : "unset";
+  }, [selectedCard, selectedFaq]);
 
   const groupLabels = {
     chat_lieu: "Chất liệu",
@@ -303,6 +318,12 @@ const CardFilter = () => {
       return matchesInput && matchesTags;
     });
   }, [searchTerm, selectedTags]);
+
+  // LOGIC PHÂN TRANG
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currentCards = filteredCards.slice(indexOfFirstCard, indexOfLastCard);
+  const totalPages = Math.ceil(filteredCards.length / cardsPerPage);
 
   const getCheapestPrice = (card) => {
     const saleTiers = card.pricing.sale;
@@ -385,8 +406,8 @@ const CardFilter = () => {
           }`}
         >
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {filteredCards.length > 0 ? (
-              filteredCards.map((card) => (
+            {currentCards.length > 0 ? (
+              currentCards.map((card) => (
                 <div
                   key={card.id}
                   className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
@@ -415,8 +436,103 @@ const CardFilter = () => {
               </div>
             )}
           </div>
+
+          {/* ĐIỀU HƯỚNG PHÂN TRANG */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-10 gap-2">
+              <button
+                onClick={() => {
+                  setCurrentPage((prev) => Math.max(prev - 1, 1));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              >
+                Trước
+              </button>
+              <div className="flex gap-1">
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => {
+                      setCurrentPage(i + 1);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                    className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${
+                      currentPage === i + 1
+                        ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
+                        : "bg-white text-gray-600 border border-gray-100 hover:border-blue-400"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => {
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              >
+                Sau
+              </button>
+            </div>
+          )}
+
+          {/* PHẦN FAQ SỬ DỤNG DỮ LIỆU TỪ JSON */}
+          <div className="w-full mt-12 pt-12 border-t border-gray-200">
+            <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-tight">
+              Câu hỏi thường gặp
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {QUESTIONS.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => setSelectedFaq(item)}
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-blue-400 transition-all group flex justify-between items-center"
+                >
+                  <p className="font-bold text-blue-600 group-hover:text-blue-700">
+                    {item.question}
+                  </p>
+                  <span className="text-gray-300 group-hover:text-blue-500 transition-colors">
+                    →
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* POPUP CHI TIẾT FAQ */}
+      {selectedFaq && (
+        <div
+          className="fixed inset-0 z-[150] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          onClick={() => setSelectedFaq(null)}
+        >
+          <div
+            className="bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 relative max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedFaq(null)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 font-bold"
+            >
+              ✕
+            </button>
+            <h4 className="text-lg font-black text-blue-600 mb-4">
+              {selectedFaq.question}
+            </h4>
+            <div className="h-0.5 w-10 bg-blue-100 mb-6"></div>
+            <div
+              className="text-gray-600 leading-relaxed font-medium"
+              dangerouslySetInnerHTML={{ __html: selectedFaq.answer }}
+            />
+          </div>
+        </div>
+      )}
 
       {selectedCard && (
         <PriceDetail
