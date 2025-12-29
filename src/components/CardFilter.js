@@ -239,7 +239,7 @@ const CardFilter = () => {
 
   // STATE PHÂN TRANG
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 2;
+  const cardsPerPage = 4;
 
   // STATE FAQ POPUP
   const [selectedFaq, setSelectedFaq] = useState(null);
