@@ -239,7 +239,7 @@ const CardFilter = () => {
 
   // STATE PHÂN TRANG
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 4;
+  const cardsPerPage = 8;
 
   // STATE FAQ POPUP
   const [selectedFaq, setSelectedFaq] = useState(null);
@@ -351,8 +351,8 @@ const CardFilter = () => {
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
         <div className="lg:w-1/4 w-full p-6 bg-white rounded-2xl shadow-sm border border-gray-100 h-fit lg:sticky lg:top-6 z-20 space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-xl font-black text-gray-900 tracking-tight">
-              Bộ lọc
+            <h3 className="text-lg justify-center font-black text-gray-900 tracking-tight text-center">
+              Thiệp cưới Linh Lam
             </h3>
             {selectedTags.length > 0 && (
               <button
