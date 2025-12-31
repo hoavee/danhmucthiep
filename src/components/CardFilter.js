@@ -156,7 +156,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
 
             <div className="mt-4 pt-4 border-t border-gray-100">
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
-                Đặt in mẫu thiệp này:
+                Liên hệ tư vấn và đặt in:
               </p>
               <div className="flex gap-2">
                 <a
