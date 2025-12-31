@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useMemo, useEffect } from "react";
-// Giả định file cardData.json nằm cùng thư mục hoặc theo cấu trúc của bạn
 import MOCK_CARDS from "../data/cardData.json";
-// IMPORT FILE CÂU HỎI MỚI TẠI ĐÂY
 import QUESTIONS from "../data/questions.json";
 
 // --- COMPONENT MODAL XEM ẢNH FULL ---
@@ -34,9 +32,10 @@ const ImageModal = ({ imageUrl, altText, onClose }) => {
   );
 };
 
-// --- HIỂN THỊ CHI TIẾT THIỆP (Popup) ---
+// --- HIỂN THỊ CHI TIẾT THIỆP ---
 const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
   const [showVideo, setShowVideo] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(card.videoUrl || "");
 
   const groupLabels = {
     chat_lieu: "Chất liệu",
@@ -47,24 +46,26 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
     mo_ta: "Mô tả",
   };
 
-  // Logic tự động nhận diện TikTok hoặc YouTube Shorts
+  // ĐÃ SỬA LỖI TẠI ĐÂY: Viết liền saleTiers
+  const getCheapestPrice = (card) => {
+    const saleTiers = card.pricing.sale;
+    return saleTiers && saleTiers.length > 0
+      ? saleTiers[saleTiers.length - 1].unit_price
+      : null;
+  };
+
   const getEmbedUrl = (url) => {
     if (!url) return "";
-
-    // Xử lý YouTube Shorts
     if (url.includes("youtube.com/shorts/")) {
       const videoId = url.split("/shorts/")[1]?.split("?")[0];
       return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
     }
-
-    // Xử lý TikTok
     if (url.includes("tiktok.com")) {
       const videoIdMatch = url.match(/\/video\/(\d+)/);
       if (videoIdMatch && videoIdMatch[1]) {
         return `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}?autoplay=1`;
       }
     }
-
     return url;
   };
 
@@ -102,7 +103,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
       >
         <button
           onClick={() => setSelectedCard(null)}
-          className="fixed md:absolute top-6 right-6 md:top-3 md:right-3 w-10 h-10 md:w-9 md:h-9 flex items-center justify-center bg-gray-900/10 md:bg-gray-100 backdrop-blur-md md:backdrop-blur-none rounded-full font-bold text-gray-600 md:text-gray-400 hover:bg-red-500 hover:text-white transition-all z-[110]"
+          className="fixed md:absolute top-6 right-6 md:top-3 md:right-3 w-10 h-10 md:w-9 md:h-9 flex items-center justify-center bg-gray-900/10 md:bg-gray-100 rounded-full font-bold text-gray-600 hover:bg-red-500 hover:text-white transition-all z-[110]"
         >
           ✕
         </button>
@@ -110,7 +111,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
         <div className="flex flex-col md:flex-row gap-6 md:gap-10">
           <div className="md:w-1/3 text-center">
             <div
-              className="bg-gray-50 rounded-xl p-4 mb-4 cursor-zoom-in group relative"
+              className="bg-gray-50 rounded-xl p-4 cursor-zoom-in group relative"
               onClick={() => setIsModalOpen(true)}
             >
               <img
@@ -122,9 +123,19 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                 Phóng to
               </div>
             </div>
-            <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+            <h2 className="text-2xl font-black text-gray-900 tracking-tight mt-4">
               {card.productCode}
             </h2>
+            <div className="mb-2">
+              <p className="text-lg font-bold text-emerald-600">
+                {getCheapestPrice(card)}đ
+              </p>
+              <p className="text-[10px] text-gray-500 italic px-4 mt-1">
+                Giá áp dụng cho số lượng trên 500. Số lượng ít hơn vui lòng liên
+                hệ để biết giá chi tiết.
+              </p>
+            </div>
+
             {isAdmin && (
               <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1 mb-4">
                 Mã NPP: {card.distributorCode}
@@ -133,31 +144,29 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
 
             {card.videoUrl && (
               <button
-                onClick={() => setShowVideo(true)}
-                className="inline-flex px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors items-center justify-center gap-2 shadow-md mb-6"
+                onClick={() => {
+                  setActiveVideo(card.videoUrl);
+                  setShowVideo(true);
+                }}
+                className="inline-flex px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors items-center justify-center gap-2 shadow-md"
               >
                 <span className="text-xs">▶</span> Xem Video
               </button>
             )}
 
             <div className="mt-4 pt-4 border-t border-gray-100">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
-                Đặt in mẫu thiệp này:
-              </p>
               <div className="flex gap-2">
                 <a
                   href="https://zalo.me/0974569396"
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0068ff] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0068ff] text-white rounded-lg text-xs font-bold shadow-sm"
                 >
                   Zalo
                 </a>
                 <a
                   href="https://m.me/thiepcuoilinhlam"
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0084FF] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0084FF] text-white rounded-lg text-xs font-bold shadow-sm"
                 >
                   Messenger
                 </a>
@@ -170,7 +179,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
               <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
                 Đặc điểm sản phẩm
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {Object.entries(groupLabels).map(
                   ([key, label]) =>
                     card.categories[key]?.length > 0 && (
@@ -186,39 +195,78 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                 )}
               </div>
             </div>
+
+            {/* --- ICON THƯỚC PHIM THEO ẢNH MẪU --- */}
+            {card.past_weddings && card.past_weddings.length > 0 && (
+              <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                  Dâu rể đã lựa chọn
+                </h3>
+                <p className="text-[10px] text-gray-500 italic px-4 mt-1">
+                  Nhấp vào để xem video
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-4 mt-3">
+                  {card.past_weddings.map((wedding, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setActiveVideo(wedding.videoUrl);
+                        setShowVideo(true);
+                      }}
+                      className="text-sm font-bold text-gray-700 hover:text-blue-600 transition-colors flex items-center group cursor-pointer"
+                    >
+                      <div className="flex items-center justify-center mr-1">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          className="w-5 h-5 text-gray-500 group-hover:text-blue-500"
+                        >
+                          {/* Khung thước phim */}
+                          <rect x="3" y="4" width="18" height="16" rx="2" />
+                          {/* Các lỗ phim trên/dưới */}
+                          <path d="M7 4v3M12 4v3M17 4v3M7 17v3M12 17v3M17 17v3" />
+                          {/* Nút Play ở giữa giống mẫu */}
+                          <path d="M10 9l5 3-5 3V9z" fill="currentColor" />
+                        </svg>
+                      </div>
+                      {wedding.names}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col sm:flex-row gap-4">
               {isAdmin && renderTiers(card.pricing.purchase, "purchase")}
-              {renderTiers(card.pricing.sale, "sale")}
+              {isAdmin && renderTiers(card.pricing.sale, "sale")}
             </div>
           </div>
         </div>
 
-        {/* --- MODAL VIDEO - NÚT CLOSE Ở GÓC TRÁI --- */}
         {showVideo && (
           <div
             className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-4"
             onClick={() => setShowVideo(false)}
           >
             <div
-              className="relative w-full max-w-[360px] aspect-[9/16] bg-black rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-800"
+              className="relative w-full max-w-[360px] aspect-[9/16] bg-black rounded-3xl overflow-hidden border-4 border-gray-800"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setShowVideo(false)}
-                className="absolute top-4 left-4 w-9 h-9 bg-black/50 hover:bg-red-500 text-white rounded-full z-[140] flex items-center justify-center transition-colors shadow-lg"
+                className="absolute top-4 left-4 w-9 h-9 bg-black/50 text-white rounded-full flex items-center justify-center transition-colors"
               >
                 ✕
               </button>
-              <div className="w-full h-full">
-                <iframe
-                  className="w-full h-full"
-                  src={getEmbedUrl(card.videoUrl)}
-                  title="Video Player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-              </div>
+              <iframe
+                className="w-full h-full"
+                src={getEmbedUrl(activeVideo)}
+                title="Video Player"
+                frameBorder="0"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
         )}
@@ -236,12 +284,8 @@ const CardFilter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
-  // STATE PHÂN TRANG
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 8;
-
-  // STATE FAQ POPUP
   const [selectedFaq, setSelectedFaq] = useState(null);
 
   useEffect(() => {
@@ -256,11 +300,6 @@ const CardFilter = () => {
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, [searchTerm, selectedTags]);
-
-  useEffect(() => {
-    document.body.style.overflow =
-      selectedCard || selectedFaq ? "hidden" : "unset";
-  }, [selectedCard, selectedFaq]);
 
   const groupLabels = {
     chat_lieu: "Chất liệu",
@@ -319,7 +358,6 @@ const CardFilter = () => {
     });
   }, [searchTerm, selectedTags]);
 
-  // LOGIC PHÂN TRANG
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const currentCards = filteredCards.slice(indexOfFirstCard, indexOfLastCard);
@@ -335,10 +373,7 @@ const CardFilter = () => {
   if (!mounted) return <div className="min-h-screen bg-[#f8f9fa]" />;
 
   return (
-    <div
-      className="relative p-4 md:p-6 bg-[#f8f9fa] min-h-screen text-gray-900"
-      style={{ fontFamily: "ui-sans-serif, system-ui, sans-serif" }}
-    >
+    <div className="relative p-4 md:p-6 bg-[#f8f9fa] min-h-screen text-gray-900">
       {isLoading && (
         <div className="fixed top-0 left-0 right-0 h-1 z-[110] overflow-hidden bg-blue-50">
           <div
@@ -350,33 +385,22 @@ const CardFilter = () => {
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
         <div className="lg:w-1/4 w-full p-6 bg-white rounded-2xl shadow-sm border border-gray-100 h-fit lg:sticky lg:top-6 z-20 space-y-6">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg justify-center font-black text-gray-900 tracking-tight text-center">
-              Thiệp cưới Linh Lam
-            </h3>
-            {selectedTags.length > 0 && (
-              <button
-                onClick={() => setSelectedTags([])}
-                className="text-[10px] font-bold text-red-500 hover:text-red-700 tracking-widest uppercase border-b border-red-200"
-              >
-                Xóa hết
-              </button>
-            )}
-          </div>
+          <h3 className="text-lg font-black text-gray-900 tracking-tight">
+            Bộ lọc
+          </h3>
           <input
             type="text"
             placeholder="Nhập mã thiệp..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
           />
-          <div className="space-y-5 max-h-[50vh] lg:max-h-none overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-5">
             {Object.entries(groupedAttributes).map(
               ([key, tags]) =>
                 tags.length > 0 && (
                   <div key={key} className="space-y-3">
-                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest flex items-center gap-2">
-                      <span className="w-1 h-1 bg-blue-600 rounded-full"></span>
+                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
                       {groupLabels[key]}
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -386,7 +410,7 @@ const CardFilter = () => {
                           onClick={() => handleTagClick(key, tag)}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                             selectedTags.includes(tag)
-                              ? "bg-blue-600 text-white border-blue-600 shadow-lg"
+                              ? "bg-blue-600 text-white border-blue-600"
                               : "bg-white text-gray-600 border-gray-100 hover:border-blue-400"
                           }`}
                         >
@@ -406,47 +430,37 @@ const CardFilter = () => {
           }`}
         >
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {currentCards.length > 0 ? (
-              currentCards.map((card) => (
-                <div
-                  key={card.id}
-                  className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                  onClick={() => setSelectedCard(card)}
-                >
-                  <div className="aspect-square p-4 flex items-center justify-center overflow-hidden">
-                    <img
-                      src={card.imagePath}
-                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
-                      alt={card.productCode}
-                    />
-                  </div>
-                  <div className="p-3 border-t border-gray-50 text-center bg-gray-50/30">
-                    <p className="text-sm font-black text-gray-900 group-hover:text-blue-600">
-                      {card.productCode}
-                    </p>
-                    <p className="text-[11px] font-bold text-emerald-600">
-                      Giá từ: {getCheapestPrice(card)}đ
-                    </p>
-                  </div>
+            {currentCards.map((card) => (
+              <div
+                key={card.id}
+                className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                onClick={() => setSelectedCard(card)}
+              >
+                <div className="aspect-square p-4 flex items-center justify-center">
+                  <img
+                    src={card.imagePath}
+                    className="w-full h-full object-contain transition-transform group-hover:scale-110"
+                    alt={card.productCode}
+                  />
                 </div>
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center text-gray-400 font-bold uppercase text-xs">
-                Không tìm thấy sản phẩm
+                <div className="p-3 border-t border-gray-50 text-center bg-gray-50/30">
+                  <p className="text-sm font-black text-gray-900 group-hover:text-blue-600">
+                    {card.productCode}
+                  </p>
+                  <p className="text-[11px] font-bold text-emerald-600">
+                    {getCheapestPrice(card)}đ
+                  </p>
+                </div>
               </div>
-            )}
+            ))}
           </div>
 
-          {/* ĐIỀU HƯỚNG PHÂN TRANG */}
           {totalPages > 1 && (
             <div className="flex justify-center items-center mt-10 gap-2">
               <button
-                onClick={() => {
-                  setCurrentPage((prev) => Math.max(prev - 1, 1));
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 bg-white border rounded-xl text-sm font-bold disabled:opacity-30"
               >
                 Trước
               </button>
@@ -454,14 +468,11 @@ const CardFilter = () => {
                 {[...Array(totalPages)].map((_, i) => (
                   <button
                     key={i + 1}
-                    onClick={() => {
-                      setCurrentPage(i + 1);
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                    }}
-                    className={`w-10 h-10 rounded-xl text-sm font-bold transition-all ${
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`w-10 h-10 rounded-xl text-sm font-bold ${
                       currentPage === i + 1
-                        ? "bg-blue-600 text-white shadow-lg shadow-blue-200"
-                        : "bg-white text-gray-600 border border-gray-100 hover:border-blue-400"
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-white border"
                     }`}
                   >
                     {i + 1}
@@ -469,21 +480,20 @@ const CardFilter = () => {
                 ))}
               </div>
               <button
-                onClick={() => {
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-bold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 bg-white border rounded-xl text-sm font-bold disabled:opacity-30"
               >
                 Sau
               </button>
             </div>
           )}
 
-          {/* PHẦN FAQ SỬ DỤNG DỮ LIỆU TỪ JSON */}
+          {/* CÂU HỎI THƯỜNG GẶP */}
           <div className="w-full mt-12 pt-12 border-t border-gray-200">
-            <h3 className="text-xl font-black text-gray-900 mb-6 uppercase tracking-tight">
+            <h3 className="text-xl font-black text-gray-900 mb-6 uppercase">
               Câu hỏi thường gặp
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -491,12 +501,10 @@ const CardFilter = () => {
                 <div
                   key={item.id}
                   onClick={() => setSelectedFaq(item)}
-                  className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-blue-400 transition-all group flex justify-between items-center"
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-blue-400 group flex justify-between items-center"
                 >
-                  <p className="font-bold text-blue-600 group-hover:text-blue-700">
-                    {item.question}
-                  </p>
-                  <span className="text-gray-300 group-hover:text-blue-500 transition-colors">
+                  <p className="font-bold text-blue-600">{item.question}</p>
+                  <span className="text-gray-300 group-hover:text-blue-500">
                     →
                   </span>
                 </div>
@@ -506,28 +514,27 @@ const CardFilter = () => {
         </div>
       </div>
 
-      {/* POPUP CHI TIẾT FAQ */}
+      {/* POPUP FAQ */}
       {selectedFaq && (
         <div
           className="fixed inset-0 z-[150] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={() => setSelectedFaq(null)}
         >
           <div
-            className="bg-white p-8 rounded-2xl shadow-2xl border border-gray-100 relative max-w-md w-full"
+            className="bg-white p-8 rounded-2xl shadow-2xl relative max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelectedFaq(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-red-500 font-bold"
+              className="absolute top-4 right-4 text-gray-400 hover:text-red-500"
             >
               ✕
             </button>
             <h4 className="text-lg font-black text-blue-600 mb-4">
               {selectedFaq.question}
             </h4>
-            <div className="h-0.5 w-10 bg-blue-100 mb-6"></div>
             <div
-              className="text-gray-600 leading-relaxed font-medium"
+              className="text-gray-600 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: selectedFaq.answer }}
             />
           </div>
@@ -552,12 +559,7 @@ const CardFilter = () => {
 
       <style
         dangerouslySetInnerHTML={{
-          __html: `
-        @keyframes progress-loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-      `,
+          __html: `@keyframes progress-loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`,
         }}
       />
     </div>
