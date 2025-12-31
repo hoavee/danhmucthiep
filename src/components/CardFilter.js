@@ -419,7 +419,7 @@ const CardFilter = () => {
           />
         </svg>
         <span className="text-xs font-bold tracking-tight">
-          Lọc {selectedTags.length > 0 && `(${selectedTags.length})`}
+          Bộ lọc {selectedTags.length > 0 && `(${selectedTags.length})`}
         </span>
       </button>
 
@@ -526,13 +526,6 @@ const CardFilter = () => {
             isLoading ? "opacity-30" : "opacity-100"
           }`}
         >
-          <div className="mb-6">
-            <h1 className="text-xl font-black text-gray-800 uppercase tracking-tight">
-              Danh sách mẫu thiệp{" "}
-              <span className="text-blue-600">({filteredCards.length})</span>
-            </h1>
-          </div>
-
           {filteredCards.length === 0 ? (
             <div className="bg-white rounded-3xl p-20 text-center border-2 border-dashed border-gray-200">
               <p className="text-gray-400 font-bold">
