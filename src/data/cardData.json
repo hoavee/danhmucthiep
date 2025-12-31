@@ -122,6 +122,12 @@
     "productCode": "LL022",
     "distributorCode": "TLP-1447",
     "imagePath": "/cards/LL022.webp",
+    "past_weddings": [
+      {
+        "names": "Hồng Thảo & Huỳnh Đức",
+        "videoUrl": "https://youtube.com/shorts/3r9R78ig67c"
+      }
+    ],
     "pricing": {
       "purchase": [
         { "min_quantity": 0, "unit_price": "1.800" },
@@ -150,24 +156,6 @@
     "distributorCode": "TLP-1204",
     "imagePath": "/cards/LL025.webp",
     "videoUrl": "https://youtube.com/shorts/8tw6F8M7Zqg",
-    "past_weddings": [
-      {
-        "names": "Hồng Thảo & Huỳnh Đức",
-        "videoUrl": "https://youtube.com/shorts/3r9R78ig67c"
-      },
-      {
-        "names": "Nhật Long & Nguyệt Vân",
-        "videoUrl": "https://youtube.com/shorts/8tw6F8M7Zqg"
-      },
-      {
-        "names": "Hoàng Việt & Thương Mến",
-        "videoUrl": "https://youtube.com/shorts/8tw6F8M7Zqg"
-      },
-      {
-        "names": "Hoàng Trung & Thủy Anh",
-        "videoUrl": "https://youtube.com/shorts/8tw6F8M7Zqg"
-      }
-    ],
     "pricing": {
       "purchase": [
         { "min_quantity": 0, "unit_price": "1.700" },

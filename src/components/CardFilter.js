@@ -131,7 +131,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                 {getCheapestPrice(card)}đ
               </p>
               <p className="text-[10px] text-gray-500 italic px-4 mt-1">
-                Giá áp dụng cho số lượng trên 500. Số lượng ít hơn vui lòng liên
+                Giá áp dụng cho số lượng trên 800. Số lượng ít hơn vui lòng liên
                 hệ để biết giá chi tiết.
               </p>
             </div>
@@ -155,19 +155,34 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
             )}
 
             <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                Đặt in mẫu thiệp này:
+              </p>
               <div className="flex gap-2">
                 <a
                   href="https://zalo.me/0974569396"
                   target="_blank"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0068ff] text-white rounded-lg text-xs font-bold shadow-sm"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0068ff] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
                 >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg"
+                    alt="Zalo"
+                    className="w-4 h-4"
+                  />
                   Zalo
                 </a>
                 <a
                   href="https://m.me/thiepcuoilinhlam"
                   target="_blank"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0084FF] text-white rounded-lg text-xs font-bold shadow-sm"
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0084FF] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
                 >
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg"
+                    alt="Messenger"
+                    className="w-4 h-4"
+                  />
                   Messenger
                 </a>
               </div>
