@@ -3,14 +3,13 @@ import React, { useState, useMemo, useEffect } from "react";
 import MOCK_CARDS from "../data/cardData.json";
 import QUESTIONS from "../data/questions.json";
 
-// --- COMPONENT MODAL XEM ẢNH FULL ---
+// --- COMPONENT MODAL XEM ẢNH FULL (Giữ nguyên) ---
 const ImageModal = ({ imageUrl, altText, onClose }) => {
   if (!imageUrl) return null;
   return (
     <div
-      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 p-4"
+      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 p-4 animate-fadeIn"
       onClick={onClose}
-      style={{ animation: "fadeIn 0.2s ease-out" }}
     >
       <div
         className="relative max-w-5xl max-h-full"
@@ -32,7 +31,7 @@ const ImageModal = ({ imageUrl, altText, onClose }) => {
   );
 };
 
-// --- HIỂN THỊ CHI TIẾT THIỆP ---
+// --- HIỂN THỊ CHI TIẾT THIỆP (Giữ nguyên) ---
 const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
   const [showVideo, setShowVideo] = useState(false);
   const [activeVideo, setActiveVideo] = useState(card.videoUrl || "");
@@ -46,7 +45,6 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
     mo_ta: "Mô tả",
   };
 
-  // ĐÃ SỬA LỖI TẠI ĐÂY: Viết liền saleTiers
   const getCheapestPrice = (card) => {
     const saleTiers = card.pricing.sale;
     return saleTiers && saleTiers.length > 0
@@ -94,7 +92,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn"
       onClick={() => setSelectedCard(null)}
     >
       <div
@@ -211,7 +209,6 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
               </div>
             </div>
 
-            {/* --- ICON THƯỚC PHIM THEO ẢNH MẪU --- */}
             {card.past_weddings && card.past_weddings.length > 0 && (
               <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
                 <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
@@ -238,11 +235,8 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
                           strokeWidth="1.5"
                           className="w-5 h-5 text-gray-500 group-hover:text-blue-500"
                         >
-                          {/* Khung thước phim */}
                           <rect x="3" y="4" width="18" height="16" rx="2" />
-                          {/* Các lỗ phim trên/dưới */}
                           <path d="M7 4v3M12 4v3M17 4v3M7 17v3M12 17v3M17 17v3" />
-                          {/* Nút Play ở giữa giống mẫu */}
                           <path d="M10 9l5 3-5 3V9z" fill="currentColor" />
                         </svg>
                       </div>
@@ -262,7 +256,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
 
         {showVideo && (
           <div
-            className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-4"
+            className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-4 animate-fadeIn"
             onClick={() => setShowVideo(false)}
           >
             <div
@@ -271,7 +265,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
             >
               <button
                 onClick={() => setShowVideo(false)}
-                className="absolute top-4 left-4 w-9 h-9 bg-black/50 text-white rounded-full flex items-center justify-center transition-colors"
+                className="absolute top-4 left-4 w-9 h-9 bg-black/50 text-white rounded-full flex items-center justify-center transition-colors z-10"
               >
                 ✕
               </button>
@@ -300,8 +294,15 @@ const CardFilter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 8;
+  const cardsPerPage = 12;
   const [selectedFaq, setSelectedFaq] = useState(null);
+
+  // State cho bộ lọc
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState({
+    chat_lieu: true,
+    tong_mau: true,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -352,6 +353,10 @@ const CardFilter = () => {
     setSelectedCard(null);
   };
 
+  const toggleGroup = (key) => {
+    setExpandedGroups((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
   const filteredCards = useMemo(() => {
     return MOCK_CARDS.filter((card) => {
       const allText = `${card.productCode} ${
@@ -388,96 +393,200 @@ const CardFilter = () => {
   if (!mounted) return <div className="min-h-screen bg-[#f8f9fa]" />;
 
   return (
-    <div className="relative p-4 md:p-6 bg-[#f8f9fa] min-h-screen text-gray-900">
+    <div className="relative p-4 md:p-8 bg-[#f8f9fa] min-h-screen text-gray-900">
       {isLoading && (
-        <div className="fixed top-0 left-0 right-0 h-1 z-[110] overflow-hidden bg-blue-50">
-          <div
-            className="h-full bg-blue-600 w-full"
-            style={{ animation: "progress-loading 0.8s infinite linear" }}
-          ></div>
+        <div className="fixed top-0 left-0 right-0 h-1 z-[200] overflow-hidden bg-blue-50">
+          <div className="h-full bg-blue-600 w-full animate-progress"></div>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
-        <div className="lg:w-1/4 w-full p-6 bg-white rounded-2xl shadow-sm border border-gray-100 h-fit lg:sticky lg:top-6 z-20 space-y-6">
-          <h3 className="text-lg font-black text-gray-900 tracking-tight">
-            Bộ lọc
-          </h3>
-          <input
-            type="text"
-            placeholder="Nhập mã thiệp..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
+      {/* --- NÚT LỌC SẢN PHẨM MOBILE --- */}
+      <button
+        onClick={() => setIsFilterOpen(true)}
+        className="lg:hidden fixed bottom-6 right-6 z-[90] bg-blue-600/95 backdrop-blur-sm text-white pl-4 pr-5 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 flex items-center gap-2 transition-all active:scale-90"
+      >
+        <svg
+          className="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.5"
+            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
           />
-          <div className="space-y-5">
-            {Object.entries(groupedAttributes).map(
-              ([key, tags]) =>
-                tags.length > 0 && (
-                  <div key={key} className="space-y-3">
-                    <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
-                      {groupLabels[key]}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {tags.map((tag) => (
-                        <button
-                          key={tag}
-                          onClick={() => handleTagClick(key, tag)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
-                            selectedTags.includes(tag)
-                              ? "bg-blue-600 text-white border-blue-600"
-                              : "bg-white text-gray-600 border-gray-100 hover:border-blue-400"
-                          }`}
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )
-            )}
-          </div>
-        </div>
+        </svg>
+        <span className="text-xs font-bold tracking-tight">
+          Lọc {selectedTags.length > 0 && `(${selectedTags.length})`}
+        </span>
+      </button>
 
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+        {/* --- SIDEBAR FILTER (DRAWER ON MOBILE) --- */}
+        <aside
+          className={`
+          fixed inset-0 z-[150] lg:relative lg:inset-auto lg:z-10 lg:block lg:w-1/4
+          ${
+            isFilterOpen
+              ? "translate-x-0"
+              : "-translate-x-full lg:translate-x-0"
+          }
+          transition-transform duration-300 ease-in-out bg-black/40 lg:bg-transparent
+        `}
+          onClick={() => setIsFilterOpen(false)}
+        >
+          <div
+            className="h-full w-[280px] bg-white overflow-y-auto p-6 lg:p-0 lg:sticky lg:top-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-6 lg:hidden border-b pb-4">
+              <h3 className="text-xl font-black">Bộ lọc</h3>
+              <button
+                onClick={() => setIsFilterOpen(false)}
+                className="text-2xl p-2"
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="bg-white lg:p-6 lg:rounded-2xl lg:shadow-sm lg:border lg:border-gray-100 space-y-6">
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase mb-3 tracking-widest">
+                  Tìm kiếm mã
+                </p>
+                <input
+                  type="text"
+                  placeholder="Nhập mã thiệp..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-inner"
+                />
+              </div>
+
+              <div className="space-y-2">
+                {Object.entries(groupedAttributes).map(([key, tags]) => (
+                  <div
+                    key={key}
+                    className="border-b border-gray-50 pb-2 last:border-0"
+                  >
+                    <button
+                      onClick={() => toggleGroup(key)}
+                      className="flex justify-between items-center w-full py-2 text-left group"
+                    >
+                      <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
+                        {groupLabels[key]}
+                      </span>
+                      <span
+                        className={`text-[10px] transition-transform duration-300 ${
+                          expandedGroups[key] ? "rotate-180" : ""
+                        }`}
+                      >
+                        ▼
+                      </span>
+                    </button>
+
+                    {expandedGroups[key] && (
+                      <div className="flex flex-wrap gap-2 mt-2 mb-3 animate-fadeIn">
+                        {tags.map((tag) => (
+                          <button
+                            key={tag}
+                            onClick={() => handleTagClick(key, tag)}
+                            className={`px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all ${
+                              selectedTags.includes(tag)
+                                ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                                : "bg-white text-gray-600 border-gray-100 hover:border-blue-300"
+                            }`}
+                          >
+                            {tag}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {selectedTags.length > 0 && (
+                <button
+                  onClick={() => setSelectedTags([])}
+                  className="w-full py-3 text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 rounded-xl transition-colors mt-4"
+                >
+                  Xóa tất cả bộ lọc
+                </button>
+              )}
+            </div>
+          </div>
+        </aside>
+
+        {/* --- MAIN CONTENT --- */}
         <div
           className={`lg:w-3/4 w-full transition-opacity duration-200 ${
             isLoading ? "opacity-30" : "opacity-100"
           }`}
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {currentCards.map((card) => (
-              <div
-                key={card.id}
-                className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-                onClick={() => setSelectedCard(card)}
-              >
-                <div className="aspect-square p-4 flex items-center justify-center">
-                  <img
-                    src={card.imagePath}
-                    className="w-full h-full object-contain transition-transform group-hover:scale-110"
-                    alt={card.productCode}
-                  />
-                </div>
-                <div className="p-3 border-t border-gray-50 text-center bg-gray-50/30">
-                  <p className="text-sm font-black text-gray-900 group-hover:text-blue-600">
-                    {card.productCode}
-                  </p>
-                  <p className="text-[11px] font-bold text-emerald-600">
-                    {getCheapestPrice(card)}đ
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="mb-6">
+            <h1 className="text-xl font-black text-gray-800 uppercase tracking-tight">
+              Danh sách mẫu thiệp{" "}
+              <span className="text-blue-600">({filteredCards.length})</span>
+            </h1>
           </div>
 
+          {filteredCards.length === 0 ? (
+            <div className="bg-white rounded-3xl p-20 text-center border-2 border-dashed border-gray-200">
+              <p className="text-gray-400 font-bold">
+                Không tìm thấy mẫu thiệp nào phù hợp.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setSelectedTags([]);
+                }}
+                className="mt-4 text-blue-600 font-bold underline"
+              >
+                Xóa bộ lọc
+              </button>
+            </div>
+          ) : (
+            /* THAY ĐỔI TẠI ĐÂY: grid-cols-1 thay vì grid-cols-2 */
+            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              {currentCards.map((card) => (
+                <div
+                  key={card.id}
+                  className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden"
+                  onClick={() => setSelectedCard(card)}
+                >
+                  <div className="aspect-square p-3 md:p-6 flex items-center justify-center bg-gray-50/50">
+                    <img
+                      src={card.imagePath}
+                      className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                      alt={card.productCode}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-4 border-t border-gray-50 text-center bg-white">
+                    <p className="text-sm md:text-sm font-black text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {card.productCode}
+                    </p>
+                    <p className="text-xs md:text-xs font-bold text-emerald-600 mt-1">
+                      {getCheapestPrice(card)}đ
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination (Giữ nguyên) */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center mt-10 gap-2">
+            <div className="flex justify-center items-center mt-12 gap-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 bg-white border rounded-xl text-sm font-bold disabled:opacity-30"
+                className="p-3 bg-white border rounded-xl disabled:opacity-30"
               >
-                Trước
+                ←
               </button>
               <div className="flex gap-1">
                 {[...Array(totalPages)].map((_, i) => (
@@ -487,7 +596,7 @@ const CardFilter = () => {
                     className={`w-10 h-10 rounded-xl text-sm font-bold ${
                       currentPage === i + 1
                         ? "bg-blue-600 text-white shadow-lg"
-                        : "bg-white border"
+                        : "bg-white border hover:border-blue-300"
                     }`}
                   >
                     {i + 1}
@@ -499,28 +608,42 @@ const CardFilter = () => {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 bg-white border rounded-xl text-sm font-bold disabled:opacity-30"
+                className="p-3 bg-white border rounded-xl disabled:opacity-30"
               >
-                Sau
+                →
               </button>
             </div>
           )}
 
-          {/* CÂU HỎI THƯỜNG GẶP */}
-          <div className="w-full mt-12 pt-12 border-t border-gray-200">
-            <h3 className="text-xl font-black text-gray-900 mb-6 uppercase">
+          {/* FAQ Section (Giữ nguyên) */}
+          <div className="w-full mt-4 mb-14 pt-12 border-t border-gray-200">
+            <h3 className="text-xl font-black text-gray-900 mb-8 uppercase text-center md:text-left">
               Câu hỏi thường gặp
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {QUESTIONS.map((item) => (
                 <div
                   key={item.id}
                   onClick={() => setSelectedFaq(item)}
-                  className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-blue-400 group flex justify-between items-center"
+                  className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 cursor-pointer hover:border-blue-400 transition-all group flex justify-between items-center"
                 >
-                  <p className="font-bold text-blue-600">{item.question}</p>
-                  <span className="text-gray-300 group-hover:text-blue-500">
-                    →
+                  <p className="font-bold text-gray-700 group-hover:text-blue-600 text-sm">
+                    {item.question}
+                  </p>
+                  <span className="text-blue-200 group-hover:text-blue-500">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
                   </span>
                 </div>
               ))}
@@ -529,27 +652,27 @@ const CardFilter = () => {
         </div>
       </div>
 
-      {/* POPUP FAQ */}
+      {/* MODALS (Giữ nguyên) */}
       {selectedFaq && (
         <div
-          className="fixed inset-0 z-[150] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn"
           onClick={() => setSelectedFaq(null)}
         >
           <div
-            className="bg-white p-8 rounded-2xl shadow-2xl relative max-w-md w-full"
+            className="bg-white p-6 md:p-8 rounded-3xl shadow-2xl relative max-w-lg w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelectedFaq(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-red-500"
+              className="absolute top-5 right-5 text-gray-400 hover:text-red-500 text-xl"
             >
               ✕
             </button>
-            <h4 className="text-lg font-black text-blue-600 mb-4">
+            <h4 className="text-xl font-black text-blue-600 mb-5">
               {selectedFaq.question}
             </h4>
             <div
-              className="text-gray-600 leading-relaxed"
+              className="text-gray-600 leading-relaxed text-sm md:text-base"
               dangerouslySetInnerHTML={{ __html: selectedFaq.answer }}
             />
           </div>
@@ -574,7 +697,12 @@ const CardFilter = () => {
 
       <style
         dangerouslySetInnerHTML={{
-          __html: `@keyframes progress-loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`,
+          __html: `
+            @keyframes progress-loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } } 
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            .animate-progress { animation: progress-loading 1s infinite linear; }
+            .animate-fadeIn { animation: fadeIn 0.3s ease-out forwards; }
+          `,
         }}
       />
     </div>
