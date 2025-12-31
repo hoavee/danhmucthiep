@@ -294,7 +294,7 @@ const CardFilter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 12;
+  const cardsPerPage = 8;
   const [selectedFaq, setSelectedFaq] = useState(null);
 
   // State cho bộ lọc
@@ -311,10 +311,19 @@ const CardFilter = () => {
   }, []);
 
   useEffect(() => {
-    setCurrentPage(1);
     setIsLoading(true);
+    // Cuộn lên đầu trang smooth
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
+  }, [searchTerm, selectedTags, currentPage]);
+
+  // Tách riêng logic reset trang khi lọc (để không bị cuộn 2 lần)
+  useEffect(() => {
+    setCurrentPage(1);
   }, [searchTerm, selectedTags]);
 
   const groupLabels = {
