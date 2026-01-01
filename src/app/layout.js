@@ -1,13 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google";
+// layout.js
+import { Roboto, Great_Vibes } from "next/font/google"; // Thay Geist bằng Roboto
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Cấu hình font Roboto
+const roboto = Roboto({
+  weight: ["400", "500", "700"],
+  subsets: ["vietnamese"], // Quan trọng: Thêm subset tiếng Việt
+  variable: "--font-roboto",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const brandFont = Great_Vibes({
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -18,11 +21,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="vi">
+      {/* Đổi thành vi cho chuẩn tiếng Việt */}
+      <body className={`${roboto.variable} font-sans antialiased`}>
+        <header className="w-full py-4 flex justify-center items-center bg-gray-100">
+          <h1
+            className={`${brandFont.className} text-3xl md:text-4xl text-[#8b5e3c]`}
+          >
+            Thiệp Cưới Linh Lam
+          </h1>
+        </header>
+
+        <main>{children}</main>
       </body>
     </html>
   );

@@ -128,7 +128,7 @@ const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
               <p className="text-lg font-bold text-emerald-600">
                 {getCheapestPrice(card)}đ
               </p>
-              <p className="text-[10px] text-gray-500 italic px-4 mt-1">
+              <p className="text-[12px] text-gray-500 italic px-4 mt-1">
                 Giá áp dụng cho số lượng trên 800. Số lượng ít hơn vui lòng liên
                 hệ để biết giá chi tiết.
               </p>
