@@ -154,6 +154,7 @@
     "id": 6,
     "productCode": "LL025",
     "distributorCode": "TLP-1204",
+    "isFeatured": true,
     "imagePath": "/cards/LL025.webp",
     "videoUrl": "https://youtube.com/shorts/8tw6F8M7Zqg",
     "pricing": {
@@ -182,6 +183,7 @@
     "id": 7,
     "productCode": "LL106",
     "distributorCode": "TLP-1454",
+    "isFeatured": false,
     "imagePath": "/cards/LL106.webp",
     "pricing": {
       "purchase": [

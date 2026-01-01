@@ -367,15 +367,18 @@ const CardFilter = () => {
   };
 
   const filteredCards = useMemo(() => {
-    return MOCK_CARDS.filter((card) => {
+    // 1. Lọc danh sách dựa trên tìm kiếm và tags (Giữ nguyên logic cũ)
+    const result = MOCK_CARDS.filter((card) => {
       const allText = `${card.productCode} ${
         card.distributorCode
       } ${Object.values(card.categories).flat().join(" ")}`.toLowerCase();
+
       const matchesInput = searchTerm
         .toLowerCase()
         .trim()
         .split(/\s+/)
         .every((kw) => allText.includes(kw));
+
       const matchesTags =
         selectedTags.length === 0 ||
         selectedTags.every((tag) =>
@@ -383,7 +386,15 @@ const CardFilter = () => {
             .flat()
             .some((cardTag) => cardTag.toLowerCase() === tag.toLowerCase())
         );
+
       return matchesInput && matchesTags;
+    });
+
+    // 2. Sắp xếp: Thiệp có isFeatured = true sẽ lên đầu
+    return result.sort((a, b) => {
+      if (a.isFeatured && !b.isFeatured) return -1; // a lên đầu
+      if (!a.isFeatured && b.isFeatured) return 1; // b lên đầu
+      return 0; // Giữ nguyên thứ tự nếu cả hai cùng loại
     });
   }, [searchTerm, selectedTags]);
 
@@ -559,7 +570,17 @@ const CardFilter = () => {
                   className="group bg-white rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden"
                   onClick={() => setSelectedCard(card)}
                 >
-                  <div className="aspect-square p-3 md:p-6 flex items-center justify-center bg-gray-50/50">
+                  <div className="relative aspect-square p-3 md:p-6 flex items-center justify-center bg-gray-50/50">
+                    {/* Nhãn HOT cho thiệp feature */}
+                    {card.isFeatured && (
+                      <div className="absolute top-0 left-0 z-10">
+                        <div className="bg-[#ba0000] text-white px-3 py-1.5 rounded-br-xl shadow-lg flex items-center gap-1.5 border-b border-r border-white/20">
+                          <span className="text-[9px] font-black uppercase tracking-[0.15em] leading-none">
+                            Bán chạy
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <img
                       src={card.imagePath}
                       className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
