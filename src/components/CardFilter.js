@@ -294,7 +294,7 @@ const CardFilter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const cardsPerPage = 8;
+  const cardsPerPage = 12;
   const [selectedFaq, setSelectedFaq] = useState(null);
 
   // State cho bộ lọc
