@@ -402,5 +402,86 @@
       "mui_huong": ["Thơm"],
       "mo_ta": ["Hoa lá", "Hiện đại", "Tem thư"]
     }
+  },
+  {
+    "id": 15,
+    "productCode": "LL015",
+    "distributorCode": "T-153",
+    "imagePath": "/cards/LL015.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 299", "unit_price": "2.100" },
+        { "min_quantity": "300 đến 999", "unit_price": "2.000" },
+        { "min_quantity": "trên 1000", "unit_price": "1.950" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "3.200 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "3.200" },
+        { "min_quantity": "300 đến 499", "unit_price": "3.000" },
+        { "min_quantity": "trên 500", "unit_price": "2.800" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim", "Ép kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Hồng"],
+      "thiet_ke_ruot": ["Cánh bướm"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Hoa lá", "Hiện đại"]
+    }
+  },
+  {
+    "id": 16,
+    "productCode": "LL016",
+    "distributorCode": "T-152",
+    "imagePath": "/cards/LL016.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 299", "unit_price": "2.100" },
+        { "min_quantity": "300 đến 999", "unit_price": "2.000" },
+        { "min_quantity": "trên 1000", "unit_price": "1.950" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "3.200 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "3.200" },
+        { "min_quantity": "300 đến 499", "unit_price": "3.000" },
+        { "min_quantity": "trên 500", "unit_price": "2.800" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Giấy draft", "Ánh kim", "Ép kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": [],
+      "thiet_ke_ruot": ["Cánh bướm"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Tem thư", "Hiện đại"]
+    }
+  },
+  {
+    "id": 17,
+    "productCode": "LL017",
+    "distributorCode": "TLP-1413",
+    "imagePath": "/cards/LL017.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 299", "unit_price": "2.100" },
+        { "min_quantity": "300 đến 999", "unit_price": "2.000" },
+        { "min_quantity": "trên 1000", "unit_price": "1.950" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "3.200 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "3.200" },
+        { "min_quantity": "300 đến 499", "unit_price": "3.000" },
+        { "min_quantity": "trên 500", "unit_price": "2.800" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim", "Ép kim"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Xanh", "Hồng"],
+      "thiet_ke_ruot": ["Cánh bướm"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Chibi", "Hiện đại"]
+    }
   }
 ]
