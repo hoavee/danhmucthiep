@@ -15,8 +15,9 @@ const brandFont = Great_Vibes({
 });
 
 export const metadata = {
-  title: "Danh mục thiệp cưới",
-  description: "Danh mục thiệp cưới",
+  title: "Thiệp cưới Linh Lam",
+  description:
+    "Danh mục thiệp cưới với rất nhiều mẫu đẹp từ bình dân đến cao cấp.",
 };
 
 export default function RootLayout({ children }) {
