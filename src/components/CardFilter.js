@@ -2,306 +2,27 @@
 import React, { useState, useMemo, useEffect } from "react";
 import MOCK_CARDS from "../data/cardData.json";
 import QUESTIONS from "../data/questions.json";
+// Import component modal đã tách (giả sử tên file là CardDetailModal.js)
+import CardDetailModal from "./CardDetailModal";
 
-// --- COMPONENT MODAL XEM ẢNH FULL (Giữ nguyên) ---
-const ImageModal = ({ imageUrl, altText, onClose }) => {
-  if (!imageUrl) return null;
-  return (
-    <div
-      className="fixed inset-0 z-[110] flex items-center justify-center bg-black/95 p-4 animate-fadeIn"
-      onClick={onClose}
-    >
-      <div
-        className="relative max-w-5xl max-h-full"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute -top-12 right-0 text-white text-4xl hover:text-red-500 transition-colors"
-        >
-          &times;
-        </button>
-        <img
-          src={imageUrl}
-          alt={altText}
-          className="max-h-[85vh] max-w-full object-contain shadow-2xl rounded-sm"
-        />
-      </div>
-    </div>
-  );
-};
-
-// --- HIỂN THỊ CHI TIẾT THIỆP (Giữ nguyên) ---
-const PriceDetail = ({ card, setIsModalOpen, setSelectedCard, isAdmin }) => {
-  const [showVideo, setShowVideo] = useState(false);
-  const [activeVideo, setActiveVideo] = useState(card.videoUrl || "");
-
-  const groupLabels = {
-    chat_lieu: "Chất liệu",
-    phom_dang: "Phom dáng",
-    tong_mau: "Tông màu",
-    thiet_ke_ruot: "Thiết kế ruột",
-    mui_huong: "Mùi hương",
-    mo_ta: "Mô tả",
-  };
-
-  const getCheapestPrice = (card) => {
-    const saleTiers = card.pricing.sale;
-    return saleTiers && saleTiers.length > 0
-      ? saleTiers[saleTiers.length - 1].unit_price
-      : null;
-  };
-
-  const getEmbedUrl = (url) => {
-    if (!url) return "";
-    if (url.includes("youtube.com/shorts/")) {
-      const videoId = url.split("/shorts/")[1]?.split("?")[0];
-      return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-    }
-    if (url.includes("tiktok.com")) {
-      const videoIdMatch = url.match(/\/video\/(\d+)/);
-      if (videoIdMatch && videoIdMatch[1]) {
-        return `https://www.tiktok.com/embed/v2/${videoIdMatch[1]}?autoplay=1`;
-      }
-    }
-    return url;
-  };
-
-  const renderTiers = (tiers, type) => (
-    <div className="flex-1 p-4 rounded-xl border border-gray-200 bg-white shadow-sm">
-      <h4
-        className={`text-[11px] font-bold mb-3 tracking-widest ${
-          type === "purchase" ? "text-blue-700" : "text-emerald-700"
-        }`}
-      >
-        {type === "purchase" ? "GIÁ NHẬP" : "GIÁ BÁN"}
-      </h4>
-      <div className="space-y-2">
-        {tiers.map((tier, index) => (
-          <div
-            key={index}
-            className="flex justify-between text-sm border-b border-gray-50 pb-1 last:border-0"
-          >
-            <span className="text-gray-500">sl {tier.min_quantity}:</span>
-            <span className="font-bold text-gray-900">{tier.unit_price}đ</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn"
-      onClick={() => setSelectedCard(null)}
-    >
-      <div
-        className="bg-white p-5 md:p-8 rounded-2xl shadow-2xl border border-gray-100 relative max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={() => setSelectedCard(null)}
-          className="fixed md:absolute top-6 right-6 md:top-3 md:right-3 w-10 h-10 md:w-9 md:h-9 flex items-center justify-center bg-gray-900/10 md:bg-gray-100 rounded-full font-bold text-gray-600 hover:bg-red-500 hover:text-white transition-all z-[110]"
-        >
-          ✕
-        </button>
-
-        <div className="flex flex-col md:flex-row gap-6 md:gap-10">
-          <div className="md:w-1/3 text-center">
-            <div
-              className="bg-gray-50 rounded-xl p-4 cursor-zoom-in group relative"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <img
-                src={card.imagePath}
-                className="max-h-72 object-contain mx-auto transition-transform duration-300 group-hover:scale-105"
-                alt={card.productCode}
-              />
-              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center text-[10px] font-bold uppercase text-gray-600">
-                Phóng to
-              </div>
-            </div>
-            <h2 className="text-2xl font-black text-gray-900 tracking-tight mt-4">
-              {card.productCode}
-            </h2>
-            <div className="mb-2">
-              <p className="text-lg font-bold text-emerald-600">
-                {getCheapestPrice(card)}đ
-              </p>
-              <p className="text-[12px] text-gray-500 italic px-4 mt-1">
-                Giá áp dụng cho số lượng trên 800. Số lượng ít hơn vui lòng liên
-                hệ để biết giá chi tiết.
-              </p>
-            </div>
-
-            {isAdmin && (
-              <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1 mb-4">
-                Mã NPP: {card.distributorCode}
-              </p>
-            )}
-
-            {card.videoUrl && (
-              <button
-                onClick={() => {
-                  setActiveVideo(card.videoUrl);
-                  setShowVideo(true);
-                }}
-                className="inline-flex px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-colors items-center justify-center gap-2 shadow-md"
-              >
-                <span className="text-xs">▶</span> Xem Video
-              </button>
-            )}
-
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
-                Liên hệ tư vấn và đặt in:
-              </p>
-              <div className="flex gap-2">
-                <a
-                  href="https://zalo.me/0974569396"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0068ff] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
-                >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg"
-                    alt="Zalo"
-                    className="w-4 h-4"
-                  />
-                  Zalo
-                </a>
-                <a
-                  href="https://m.me/thiepcuoilinhlam"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0084FF] text-white rounded-lg text-xs font-bold transition-transform active:scale-95 shadow-sm"
-                >
-                  <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg"
-                    alt="Messenger"
-                    className="w-4 h-4"
-                  />
-                  Messenger
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="md:w-2/3 space-y-6">
-            <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
-              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">
-                Đặc điểm sản phẩm
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {Object.entries(groupLabels).map(
-                  ([key, label]) =>
-                    card.categories[key]?.length > 0 && (
-                      <div key={key} className="flex items-baseline gap-2">
-                        <span className="text-[10px] font-bold text-blue-600 uppercase w-20 shrink-0">
-                          {label}:
-                        </span>
-                        <span className="text-sm font-bold text-gray-800">
-                          {card.categories[key].join(", ")}
-                        </span>
-                      </div>
-                    )
-                )}
-              </div>
-            </div>
-
-            {card.past_weddings && card.past_weddings.length > 0 && (
-              <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100">
-                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                  Dâu rể đã lựa chọn
-                </h3>
-                <p className="text-[10px] text-gray-500 italic px-4 mt-1">
-                  Nhấp vào để xem video
-                </p>
-                <div className="flex flex-wrap gap-x-6 gap-y-4 mt-3">
-                  {card.past_weddings.map((wedding, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setActiveVideo(wedding.videoUrl);
-                        setShowVideo(true);
-                      }}
-                      className="text-sm font-bold text-gray-700 hover:text-blue-600 transition-colors flex items-center group cursor-pointer"
-                    >
-                      <div className="flex items-center justify-center mr-1">
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          className="w-5 h-5 text-gray-500 group-hover:text-blue-500"
-                        >
-                          <rect x="3" y="4" width="18" height="16" rx="2" />
-                          <path d="M7 4v3M12 4v3M17 4v3M7 17v3M12 17v3M17 17v3" />
-                          <path d="M10 9l5 3-5 3V9z" fill="currentColor" />
-                        </svg>
-                      </div>
-                      {wedding.names}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              {isAdmin && renderTiers(card.pricing.purchase, "purchase")}
-              {isAdmin && renderTiers(card.pricing.sale, "sale")}
-            </div>
-          </div>
-        </div>
-
-        {showVideo && (
-          <div
-            className="fixed inset-0 z-[120] bg-black/95 flex items-center justify-center p-4 animate-fadeIn"
-            onClick={() => setShowVideo(false)}
-          >
-            <div
-              className="relative w-full max-w-[360px] aspect-[9/16] bg-black rounded-3xl overflow-hidden border-4 border-gray-800"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setShowVideo(false)}
-                className="absolute top-4 left-4 w-9 h-9 bg-black/50 text-white rounded-full flex items-center justify-center transition-colors z-10"
-              >
-                ✕
-              </button>
-              <iframe
-                className="w-full h-full"
-                src={getEmbedUrl(activeVideo)}
-                title="Video Player"
-                frameBorder="0"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// --- COMPONENT CHÍNH ---
 const CardFilter = () => {
   const [mounted, setMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 12;
   const [selectedFaq, setSelectedFaq] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // State cho bộ lọc
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState({
     chat_lieu: true,
     tong_mau: true,
+    gia_tien: true, // Thêm group giá vào trạng thái mở
   });
 
   useEffect(() => {
@@ -312,7 +33,6 @@ const CardFilter = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    // Cuộn lên đầu trang smooth
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -321,12 +41,12 @@ const CardFilter = () => {
     return () => clearTimeout(timer);
   }, [searchTerm, selectedTags, currentPage]);
 
-  // Tách riêng logic reset trang khi lọc (để không bị cuộn 2 lần)
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, selectedTags]);
 
   const groupLabels = {
+    gia_tien: "Giá tiền", // Label mới thêm vào
     chat_lieu: "Chất liệu",
     phom_dang: "Phom dáng",
     tong_mau: "Tông màu",
@@ -337,20 +57,36 @@ const CardFilter = () => {
 
   const groupedAttributes = useMemo(() => {
     const groups = {};
-    Object.keys(groupLabels).forEach((key) => (groups[key] = new Set()));
+    // Khởi tạo nhóm Giá tiền thủ công
+    groups["gia_tien"] = ["Giá cao", "Giá thấp"];
+
+    Object.keys(groupLabels).forEach((key) => {
+      if (key !== "gia_tien") groups[key] = new Set();
+    });
+
     MOCK_CARDS.forEach((card) => {
       Object.keys(groupLabels).forEach((key) => {
-        if (card.categories[key])
+        if (key !== "gia_tien" && card.categories[key])
           card.categories[key].forEach((val) => groups[key].add(val));
       });
     });
     return Object.fromEntries(
-      Object.entries(groups).map(([key, set]) => [key, Array.from(set).sort()])
+      Object.entries(groups).map(([key, val]) => [
+        key,
+        Array.isArray(val) ? val : Array.from(val).sort(),
+      ])
     );
   }, []);
 
   const handleTagClick = (groupKey, tag) => {
     setSelectedTags((prev) => {
+      // Logic riêng cho Giá tiền: Chỉ chọn 1 trong 2
+      if (groupKey === "gia_tien") {
+        const otherPriceTag = tag === "Giá cao" ? "Giá thấp" : "Giá cao";
+        if (prev.includes(tag)) return prev.filter((t) => t !== tag);
+        return [...prev.filter((t) => t !== otherPriceTag), tag];
+      }
+
       if (groupKey === "mo_ta")
         return prev.includes(tag)
           ? prev.filter((t) => t !== tag)
@@ -366,9 +102,22 @@ const CardFilter = () => {
     setExpandedGroups((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  // Hàm helper lấy giá mốc "trên 500" để sắp xếp
+  const getPriceForSort = (card) => {
+    const saleTiers = card.pricing.sale;
+    // Tìm tier có min_quantity là "trên 500"
+    const tier500 = saleTiers.find((t) => t.min_quantity === "trên 500");
+    if (tier500) {
+      return parseFloat(tier500.unit_price.replace(/\./g, ""));
+    }
+    // Nếu không thấy, lấy mốc cuối cùng của mảng sale
+    return parseFloat(
+      saleTiers[saleTiers.length - 1].unit_price.replace(/\./g, "")
+    );
+  };
+
   const filteredCards = useMemo(() => {
-    // 1. Lọc danh sách dựa trên tìm kiếm và tags (Giữ nguyên logic cũ)
-    const result = MOCK_CARDS.filter((card) => {
+    let result = MOCK_CARDS.filter((card) => {
       const allText = `${card.productCode} ${
         card.distributorCode
       } ${Object.values(card.categories).flat().join(" ")}`.toLowerCase();
@@ -379,9 +128,14 @@ const CardFilter = () => {
         .split(/\s+/)
         .every((kw) => allText.includes(kw));
 
+      // Lọc bỏ tags giá tiền ra khỏi việc so khớp category
+      const nonPriceTags = selectedTags.filter(
+        (t) => t !== "Giá cao" && t !== "Giá thấp"
+      );
+
       const matchesTags =
-        selectedTags.length === 0 ||
-        selectedTags.every((tag) =>
+        nonPriceTags.length === 0 ||
+        nonPriceTags.every((tag) =>
           Object.values(card.categories)
             .flat()
             .some((cardTag) => cardTag.toLowerCase() === tag.toLowerCase())
@@ -390,12 +144,21 @@ const CardFilter = () => {
       return matchesInput && matchesTags;
     });
 
-    // 2. Sắp xếp: Thiệp có isFeatured = true sẽ lên đầu
-    return result.sort((a, b) => {
-      if (a.isFeatured && !b.isFeatured) return -1; // a lên đầu
-      if (!a.isFeatured && b.isFeatured) return 1; // b lên đầu
-      return 0; // Giữ nguyên thứ tự nếu cả hai cùng loại
-    });
+    // Thực hiện sắp xếp
+    if (selectedTags.includes("Giá cao")) {
+      result.sort((a, b) => getPriceForSort(b) - getPriceForSort(a));
+    } else if (selectedTags.includes("Giá thấp")) {
+      result.sort((a, b) => getPriceForSort(a) - getPriceForSort(b));
+    } else {
+      // Sắp xếp mặc định của file gốc
+      result.sort((a, b) => {
+        if (a.isFeatured && !b.isFeatured) return -1;
+        if (!a.isFeatured && b.isFeatured) return 1;
+        return 0;
+      });
+    }
+
+    return result;
   }, [searchTerm, selectedTags]);
 
   const indexOfLastCard = currentPage * cardsPerPage;
@@ -420,7 +183,6 @@ const CardFilter = () => {
         </div>
       )}
 
-      {/* --- NÚT LỌC SẢN PHẨM MOBILE --- */}
       <button
         onClick={() => setIsFilterOpen(true)}
         className="lg:hidden fixed bottom-6 right-6 z-[90] bg-blue-600/95 backdrop-blur-sm text-white pl-4 pr-5 py-2.5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 flex items-center gap-2 transition-all active:scale-90"
@@ -444,17 +206,12 @@ const CardFilter = () => {
       </button>
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
-        {/* --- SIDEBAR FILTER (DRAWER ON MOBILE) --- */}
         <aside
-          className={`
-          fixed inset-0 z-[150] lg:relative lg:inset-auto lg:z-10 lg:block lg:w-1/4
-          ${
+          className={`fixed inset-0 z-[150] lg:relative lg:inset-auto lg:z-10 lg:block lg:w-1/4 ${
             isFilterOpen
               ? "translate-x-0"
               : "-translate-x-full lg:translate-x-0"
-          }
-          transition-transform duration-300 ease-in-out bg-black/40 lg:bg-transparent
-        `}
+          } transition-transform duration-300 ease-in-out bg-black/40 lg:bg-transparent`}
           onClick={() => setIsFilterOpen(false)}
         >
           <div
@@ -470,8 +227,7 @@ const CardFilter = () => {
                 &times;
               </button>
             </div>
-
-            <div className="bg-white lg:p-6 lg:rounded-2xl lg:shadow-sm lg:border lg:border-gray-100 space-y-6">
+            <div className="bg-white lg:p-6 space-y-6">
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase mb-3 tracking-widest">
                   Tìm kiếm mã
@@ -485,6 +241,14 @@ const CardFilter = () => {
                 />
               </div>
 
+              {selectedTags.length > 0 && (
+                <button
+                  onClick={() => setSelectedTags([])}
+                  className="w-full py-3 text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
+                >
+                  Xóa tất cả bộ lọc
+                </button>
+              )}
               <div className="space-y-2">
                 {Object.entries(groupedAttributes).map(([key, tags]) => (
                   <div
@@ -506,7 +270,6 @@ const CardFilter = () => {
                         ▼
                       </span>
                     </button>
-
                     {expandedGroups[key] && (
                       <div className="flex flex-wrap gap-2 mt-2 mb-3 animate-fadeIn">
                         {tags.map((tag) => (
@@ -527,20 +290,10 @@ const CardFilter = () => {
                   </div>
                 ))}
               </div>
-
-              {selectedTags.length > 0 && (
-                <button
-                  onClick={() => setSelectedTags([])}
-                  className="w-full py-3 text-xs font-bold text-red-500 bg-red-50 hover:bg-red-100 rounded-xl transition-colors mt-4"
-                >
-                  Xóa tất cả bộ lọc
-                </button>
-              )}
             </div>
           </div>
         </aside>
 
-        {/* --- MAIN CONTENT --- */}
         <div
           className={`lg:w-3/4 w-full transition-opacity duration-200 ${
             isLoading ? "opacity-30" : "opacity-100"
@@ -562,7 +315,6 @@ const CardFilter = () => {
               </button>
             </div>
           ) : (
-            /* THAY ĐỔI TẠI ĐÂY: grid-cols-1 thay vì grid-cols-2 */
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {currentCards.map((card) => (
                 <div
@@ -571,7 +323,6 @@ const CardFilter = () => {
                   onClick={() => setSelectedCard(card)}
                 >
                   <div className="relative aspect-square p-3 md:p-6 flex items-center justify-center bg-gray-50/50">
-                    {/* Nhãn HOT cho thiệp feature */}
                     {card.isFeatured && (
                       <div className="absolute top-0 left-0 z-10">
                         <div className="bg-[#ba0000] text-white px-3 py-1.5 rounded-br-xl shadow-lg flex items-center gap-1.5 border-b border-r border-white/20">
@@ -601,9 +352,8 @@ const CardFilter = () => {
             </div>
           )}
 
-          {/* Pagination (Giữ nguyên) */}
           {totalPages > 1 && (
-            <div className="flex justify-center items-center mt-12 gap-2">
+            <div className="flex justify-center items-center mt-4 gap-2">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -638,9 +388,8 @@ const CardFilter = () => {
             </div>
           )}
 
-          {/* FAQ Section (Giữ nguyên) */}
-          <div className="w-full mt-4 mb-14 pt-12 border-t border-gray-200">
-            <h3 className="text-xl font-black text-gray-900 mb-8 uppercase text-center md:text-left">
+          <div className="w-full mt-4 mb-14 pt-4 border-t border-gray-200">
+            <h3 className="text-xl font-black text-gray-900 mb-4 uppercase text-center md:text-left">
               Câu hỏi thường gặp
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -675,7 +424,6 @@ const CardFilter = () => {
         </div>
       </div>
 
-      {/* MODALS (Giữ nguyên) */}
       {selectedFaq && (
         <div
           className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fadeIn"
@@ -702,19 +450,12 @@ const CardFilter = () => {
         </div>
       )}
 
+      {/* SỬ DỤNG COMPONENT MỚI Ở ĐÂY */}
       {selectedCard && (
-        <PriceDetail
+        <CardDetailModal
           card={selectedCard}
-          setIsModalOpen={setIsModalOpen}
           setSelectedCard={setSelectedCard}
           isAdmin={isAdmin}
-        />
-      )}
-      {selectedCard && isModalOpen && (
-        <ImageModal
-          imageUrl={selectedCard.imagePath}
-          altText={selectedCard.productCode}
-          onClose={() => setIsModalOpen(false)}
         />
       )}
 
