@@ -727,5 +727,218 @@
       "mui_huong": ["Thơm"],
       "mo_ta": ["Hoa lá", "Cổ điển", "Hoa sen", "Trầu cau"]
     }
+  },
+  {
+    "id": 26,
+    "productCode": "LL029",
+    "distributorCode": "DQ-25A35",
+    "imagePath": "/cards/LL029.webp",
+    "videoUrl": "",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.800" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.700" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.650" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.600" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.500" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.450" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.900 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.900" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.800" },
+        { "min_quantity": "trên 500", "unit_price": "2.500" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim"],
+      "phom_dang": ["Bao thư đứng"],
+      "tong_mau": ["Đỏ"],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Hoa lá", "Nơ", "Hiện đại"]
+    }
+  },
+  {
+    "id": 27,
+    "productCode": "LL030",
+    "distributorCode": "DQ-25A38",
+    "imagePath": "/cards/LL030.webp",
+    "videoUrl": "",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.800" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.700" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.650" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.600" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.500" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.450" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.900 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.900" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.800" },
+        { "min_quantity": "trên 500", "unit_price": "2.500" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim"],
+      "phom_dang": ["Bao thư đứng"],
+      "tong_mau": ["Xanh"],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Hoa lá", "Hiện đại"]
+    }
+  },
+  {
+    "id": 28,
+    "productCode": "LL031",
+    "distributorCode": "DQ-25A39",
+    "imagePath": "/cards/LL031.webp",
+    "videoUrl": "",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.800" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.700" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.650" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.600" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.500" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.450" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.900 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.900" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.800" },
+        { "min_quantity": "trên 500", "unit_price": "2.500" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Ánh kim"],
+      "phom_dang": ["Bao thư đứng"],
+      "tong_mau": [],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Thơm"],
+      "mo_ta": ["Hoa lá", "Hiện đại", "Nơ"]
+    }
+  },
+  {
+    "id": 29,
+    "productCode": "LL032",
+    "distributorCode": "DQ-25A15",
+    "imagePath": "/cards/LL032.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.500" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.400" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.350" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.300" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.200" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.150" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.600 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.600" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.500" },
+        { "min_quantity": "trên 500", "unit_price": "2.200" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Giấy ford"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Hồng"],
+      "thiet_ke_ruot": ["Cắt bế"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Hoa lá", "Hiện đại", "Hoa sen"]
+    }
+  },
+  {
+    "id": 30,
+    "productCode": "LL033",
+    "distributorCode": "DQ-25A16",
+    "imagePath": "/cards/LL033.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.500" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.400" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.350" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.300" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.200" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.150" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.600 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.600" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.500" },
+        { "min_quantity": "trên 500", "unit_price": "2.200" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Giấy ford"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Hồng"],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Hoa lá", "Hiện đại"]
+    }
+  },
+  {
+    "id": 31,
+    "productCode": "LL034",
+    "distributorCode": "DQ-25A17",
+    "imagePath": "/cards/LL034.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.500" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.400" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.350" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.300" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.200" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.150" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.600 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.600" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.500" },
+        { "min_quantity": "trên 500", "unit_price": "2.200" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Giấy ford"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Hồng"],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Hoa lá", "Hiện đại"]
+    }
+  },
+  {
+    "id": 32,
+    "productCode": "LL035",
+    "distributorCode": "DQ-25A18",
+    "imagePath": "/cards/LL035.webp",
+    "pricing": {
+      "purchase": [
+        { "min_quantity": "0 đến 499", "unit_price": "1.500" },
+        { "min_quantity": "500 đến 999", "unit_price": "1.400" },
+        { "min_quantity": "1.000 đến 1.999", "unit_price": "1.350" },
+        { "min_quantity": "2.000 đến 2.999", "unit_price": "1.300" },
+        { "min_quantity": "trên 3.000", "unit_price": "1.200" },
+        { "min_quantity": "trên 10.000", "unit_price": "1.150" }
+      ],
+      "sale": [
+        { "min_quantity": "dưới 100", "unit_price": "2.600 + phí 50k" },
+        { "min_quantity": "100 đến 299", "unit_price": "2.600" },
+        { "min_quantity": "300 đến 499", "unit_price": "2.500" },
+        { "min_quantity": "trên 500", "unit_price": "2.200" }
+      ]
+    },
+    "categories": {
+      "chat_lieu": ["Giấy ford"],
+      "phom_dang": ["Bao thư ngang"],
+      "tong_mau": ["Đỏ", "Trắng"],
+      "thiet_ke_ruot": ["Bo oval"],
+      "mui_huong": ["Không mùi"],
+      "mo_ta": ["Chibi", "Song hỷ", "Tem thư"]
+    }
   }
 ]
